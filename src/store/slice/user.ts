@@ -15,11 +15,12 @@ export const user = createSlice(
     {
         name: 'user',
         initialState: {
-            user: null
+            user: localStorage.getItem('user') && JSON.parse(localStorage.getItem('user'))
         } as RootState,
         reducers: {
             setUser: (state, action) => {
                 state.user = {...state.user, ...action.payload}
+                localStorage.setItem('user', JSON.stringify(action.payload))
             }
         }
     }

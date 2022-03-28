@@ -3,10 +3,13 @@ export interface ContentDTO {
     title: string
     url: string
     sourceId: string
-    sentiments: ContentSentiments[];
 }
 
-export interface ContentSentiments {
+export interface ContentDetail extends ContentDTO{
+    sentiments: { themeId: string, sentiment: string }[];
+}
+
+export interface ContentWithSentiment extends ContentDTO{
     themeId: string;
     sentiment: Sentiment
 }
