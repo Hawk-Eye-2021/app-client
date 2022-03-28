@@ -45,4 +45,5 @@ export const login = (username: string, password: string, callback: any) => (dis
 
 export const logout = () => (dispatch) => {
     dispatch(user.actions.setUser(null))
+    localStorage.removeItem('user')
 }
