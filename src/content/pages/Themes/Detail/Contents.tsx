@@ -5,6 +5,7 @@ import {ContentWithSentiment} from "../../../../dto/ContentDTO";
 import {SourceDTO} from "../../../../dto/SourceDTO";
 import "./ThemeDetail.scss";
 import Label from "../../../../components/Label";
+import {Link} from "react-router-dom";
 
 function Contents({
                       themeName,
@@ -49,16 +50,16 @@ function Contents({
                     contents.map((content, index) => {
                         return (
                             <>
-                                <div className={"content"}>
+                                <div className={"content"} onClick={() => {console.log("asd"); window.open(content.url, "_blank")}}>
                                     <div className={"title"}>
-                                        <Tooltip title={content.title}>
-                                            <Typography className={"truncate"}>
-                                                {content.title}
-                                            </Typography>
-                                        </Tooltip>
+                                            <Tooltip title={content.title}>
+                                                <Typography className={"truncate"}>
+                                                    {content.title}
+                                                </Typography>
+                                            </Tooltip>
                                     </div>
                                     <div className={"contentLabels"}>
-                                        <div className={"source contentLabel"} >
+                                        <div className={"source contentLabel"}>
                                             <Typography>
                                                 {getSourceLabel(content.sourceId)}
                                             </Typography>
