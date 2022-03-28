@@ -21,7 +21,7 @@ function ThemesTable() {
 
     useEffect(() => {
         dispatch(getThemesFromUser(user.id))
-    }, [])
+    }, [dispatch, user.id])
 
     const handleDeleteTheme = (theme) => {
         dispatch(deleteTheme(user.id, theme))
