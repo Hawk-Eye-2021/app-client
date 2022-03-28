@@ -103,16 +103,11 @@ function Logo() {
   return (
     <LogoWrapper to="/overview">
       <LogoSignWrapper>
-        <LogoSign>
-          <LogoSignInner />
-        </LogoSign>
+
       </LogoSignWrapper>
       <Hidden smDown>
         <LogoTextWrapper>
-          <Tooltip title="Version 1.1.0" arrow placement="right">
-            <VersionBadge>1.1</VersionBadge>
-          </Tooltip>
-          <LogoText>Tokyo Free White</LogoText>
+            <LogoText>Hawk eye</LogoText>
         </LogoTextWrapper>
       </Hidden>
     </LogoWrapper>

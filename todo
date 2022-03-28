@@ -4,7 +4,7 @@ sidebar:
 login:
     - fix el logout ✅
 
-logo
+logo ✅
 
 autocomplete:
 
@@ -16,6 +16,8 @@ contendidos:
     - link a URL
     - fecha y hora
     - filtros por source
+    - boton hacia atras
+
 
 metabase:
 
