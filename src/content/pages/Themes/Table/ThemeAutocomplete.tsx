@@ -1,7 +1,7 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import TextField from '@mui/material/TextField';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import {useEffect, useState} from "react";
+import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import http from "../../../../http/http";
 
 export interface ThemeOptionType {
@@ -31,19 +31,7 @@ export default function ThemeAutocomplete({onChange, value}) {
             loading={loading}
             onChange={onChange}
             filterOptions={(options, params) => {
-                const filtered = filter(options, params);
-
-                const { inputValue } = params;
-                // Suggest the creation of a new value
-                const isExisting = options.some((option) => inputValue === option.name);
-                if (inputValue !== '' && !isExisting) {
-                    filtered.push({
-                        inputValue,
-                        name: `Agregar "${inputValue}"`,
-                    });
-                }
-
-                return filtered;
+                return filter(options, params);
             }}
             selectOnFocus
             clearOnBlur
@@ -63,7 +51,6 @@ export default function ThemeAutocomplete({onChange, value}) {
             }}
             renderOption={(props, option) => <li {...props}>{option.name}</li>}
             sx={{ width: 300 }}
-            freeSolo
             renderInput={(params) => (
                 <TextField {...params} label="Buscar Tema" />
             )}
