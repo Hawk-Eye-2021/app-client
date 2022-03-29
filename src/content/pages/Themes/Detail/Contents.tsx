@@ -43,7 +43,7 @@ function Contents({
     }
 
 
-    const getSentimentColor = (sentiment: string): "error" | "success" | "warning" => {
+    const getSentimentDisplay = (sentiment: string): {color: "error" | "success" | "warning", text: string} => {
 
 
         const map = {
@@ -61,8 +61,8 @@ function Contents({
             }
         };
 
-        const {color}: any = map[sentiment];
-        return color
+        return  map[sentiment];
+
     };
 
     return (
@@ -85,7 +85,7 @@ function Contents({
                                         gutterBottom: true,
                                         noWrap: false
                                     }}
-                                    secondary={<Text color={getSentimentColor(content.sentiment)}>{toTitleCase(content.sentiment)}</Text>}
+                                    secondary={<Text color={getSentimentDisplay(content.sentiment).color}>{toTitleCase(getSentimentDisplay(content.sentiment).text)}</Text>}
                                     secondaryTypographyProps={{variant: 'body2', noWrap: true}}
                                 />
                                 <ListItemIcon>
