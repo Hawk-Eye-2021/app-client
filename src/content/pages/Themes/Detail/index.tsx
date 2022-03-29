@@ -9,21 +9,35 @@ import http from "../../../../http/http";
 import {ContentWithSentiment} from "../../../../dto/ContentDTO";
 import {SourceDTO} from "../../../../dto/SourceDTO";
 import SuspenseLoader from "../../../../components/SuspenseLoader";
+import {useParams} from "react-router";
 
 function ThemeDetail() {
 
-    const selectedTheme = useSelector((state: RootState) => state.theme.selectedTheme);
+    let params = useParams();
+    let themeId = params.themeId
+
+    //theme
+    const [theme, setTheme] = useState(undefined)
+    const getTheme = () => {
+        http
+            .get(`/themes/${themeId}`)
+            .then(({data}) => setTheme(data))
+    }
+
+    useEffect(() => {
+        getTheme()
+    }, [themeId])
 
     // contents
     const [contents, setContents]: [ContentWithSentiment[], ((value) => void)] = useState([])
     const getContents = () => {
         http
-            .get(`/themes/${selectedTheme.id}/contents`)
+            .get(`/themes/${themeId}/contents`)
             .then(({data}) => setContents(data))
     }
     useEffect(() => {
         getContents()
-    }, [selectedTheme])
+    }, [themeId])
 
 
     // sources
@@ -37,7 +51,7 @@ function ThemeDetail() {
     }, [])
 
     // loading
-    const loading = !sources.length || !contents.length
+    const loading = !sources.length || !contents.length || !theme
     return (
         <>
             <Helmet>
@@ -55,7 +69,7 @@ function ThemeDetail() {
                 >
                     <Grid sm={12} md={8} item>
                         <div className={"gridItem"}>
-                            <Contents themeId={selectedTheme.id} themeName={selectedTheme.name} contents={contents}
+                            <Contents themeId={themeId} themeName={theme.name} contents={contents}
                                       sources={sources}/>
                         </div>
                     </Grid>
@@ -63,7 +77,7 @@ function ThemeDetail() {
                         <div className={"gridItem"}>
                             <div className={"graph-wrapper"}>
                                 <iframe
-                                    src={`https://hawk-eye-metabase.herokuapp.com/public/question/39949d2b-f27b-4013-a9c8-aeb5a33ddc25?theme_id=${selectedTheme.id}`}
+                                    src={`https://hawk-eye-metabase.herokuapp.com/public/question/39949d2b-f27b-4013-a9c8-aeb5a33ddc25?theme_id=${themeId}`}
                                     frameBorder="0"
                                     height={"100%"}
                                     width={"100%"}
@@ -72,7 +86,7 @@ function ThemeDetail() {
                             </div>
                             <div className={"graph-wrapper"}>
                                 <iframe
-                                    src={`https://hawk-eye-metabase.herokuapp.com/public/question/39949d2b-f27b-4013-a9c8-aeb5a33ddc25?theme_id=${selectedTheme.id}`}
+                                    src={`https://hawk-eye-metabase.herokuapp.com/public/question/39949d2b-f27b-4013-a9c8-aeb5a33ddc25?theme_id=${themeId}`}
                                     frameBorder="0"
                                     height={"100%"}
                                     width={"100%"}

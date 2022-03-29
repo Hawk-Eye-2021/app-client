@@ -29,7 +29,7 @@ function ThemesTable() {
 
     const handleViewTheme = (theme) => {
         dispatch(viewTheme(theme));
-        navigate('/app/theme/detail')
+        navigate(`/app/theme/${theme.id}`)
     }
 
     return (

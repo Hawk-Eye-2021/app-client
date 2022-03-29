@@ -78,7 +78,7 @@ const routes: PartialRouteObject[] = [
             element: <Themes/>,
           },
           {
-            path: "/theme/detail",
+            path: "/theme/:themeId",
             element: <ThemeDetail/>
           }
         ]
