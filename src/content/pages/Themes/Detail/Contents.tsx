@@ -1,12 +1,12 @@
 import {
-    Avatar, Button,
+    Avatar,
     Card,
     CardHeader,
-    Divider, Icon, IconButton,
+    Divider,
     List,
     ListItem,
-    ListItemAvatar, ListItemButton, ListItemIcon, ListItemSecondaryAction,
-    ListItemText, Switch
+    ListItemAvatar, ListItemIcon,
+    ListItemText, Tooltip
 } from "@mui/material"
 import {ContentWithSentiment} from "../../../../dto/ContentDTO";
 import {SourceDTO} from "../../../../dto/SourceDTO";
@@ -16,8 +16,7 @@ import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import es from 'javascript-time-ago/locale/es.json'
 import PropTypes from "prop-types";
-import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
-import {OpenInNew, OpenInNewTwoTone} from "@mui/icons-material";
+
 TimeAgo.addDefaultLocale(es)
 
 function Contents({
@@ -28,7 +27,7 @@ function Contents({
 
     const getSourceIcon = (sourceId: string): JSX.Element => {
 
-        return  <Avatar
+        return <Avatar
             src={sources.find(s => s.id === sourceId).icon}
         />
     }
@@ -36,14 +35,18 @@ function Contents({
     function toTitleCase(str) {
         return str.replace(
             /\w\S*/g,
-            function(txt) {
+            function (txt) {
                 return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
             }
         );
     }
 
+    const byDate = ((a, b) => {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    })
 
-    const getSentimentDisplay = (sentiment: string): {color: "error" | "success" | "warning", text: string} => {
+
+    const getSentimentDisplay = (sentiment: string): { color: "error" | "success" | "warning", text: string } => {
 
 
         const map = {
@@ -61,7 +64,7 @@ function Contents({
             }
         };
 
-        return  map[sentiment];
+        return map[sentiment];
 
     };
 
@@ -71,10 +74,10 @@ function Contents({
             <Divider/>
             <List disablePadding>
                 {
-                    contents.map(content => [
+                    contents.sort(byDate).map(content => [
                             <ListItem button={true} sx={{py: 2}} onClick={() => window.open(content.url, "blank_")}>
                                 <ListItemAvatar>
-                                {getSourceIcon(content.sourceId)}
+                                    {getSourceIcon(content.sourceId)}
                                 </ListItemAvatar>
                                 <ListItemText
                                     primary={<Text color="black">{content.title}</Text>}
@@ -85,12 +88,17 @@ function Contents({
                                         gutterBottom: true,
                                         noWrap: false
                                     }}
-                                    secondary={<Text color={getSentimentDisplay(content.sentiment).color}>{toTitleCase(getSentimentDisplay(content.sentiment).text)}</Text>}
+                                    secondary={<Text
+                                        color={getSentimentDisplay(content.sentiment).color}>{toTitleCase(getSentimentDisplay(content.sentiment).text)}</Text>}
                                     secondaryTypographyProps={{variant: 'body2', noWrap: true}}
                                 />
-                                <ListItemIcon>
-                                    <ReactTimeAgo date={new Date(content.createdAt)} />
-                                </ListItemIcon>
+                                <Tooltip title={new Date(content.createdAt).toLocaleDateString() + " " + new Date(content.createdAt).toLocaleTimeString()}>
+                                    <ListItemIcon>
+
+                                        <ReactTimeAgo date={new Date(content.createdAt)} tooltip={false}/>
+
+                                    </ListItemIcon>
+                                </Tooltip>
                             </ListItem>,
                             <Divider/>
                         ]
