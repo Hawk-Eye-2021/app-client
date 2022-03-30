@@ -14,11 +14,13 @@ autocomplete:
 contendidos:
 
     - link a URL ✅
-    - fecha y hora
-    - filtros por source
+    - fecha y hora✅
+    - filtros por source (marian)
     - boton hacia atras
-
+    - paginado (mati)
+    - orden por fecha (mati)
 
 metabase:
 
-    - queries
+    - dashboard para el tema ✅
+    - dashboard general (mati)
