@@ -53,6 +53,7 @@ const Login = Loader(lazy(() => import('src/content/pages/Login')));
 //Themes
 const Themes = Loader(lazy(() => import('src/content/pages/Themes/Table')));
 const ThemeDetail = Loader(lazy(() => import('src/content/pages/Themes/Detail')));
+const Analytics = Loader(lazy(() => import('src/content/pages/Analytics')));
 
 const routes: PartialRouteObject[] = [
   {
@@ -80,6 +81,10 @@ const routes: PartialRouteObject[] = [
           {
             path: "/theme/:themeId",
             element: <ThemeDetail/>
+          },
+          {
+            path: "/analytics",
+            element: <Analytics/>
           }
         ]
       },

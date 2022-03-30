@@ -40,7 +40,7 @@ const menuItems: MenuItems[] = [
       },
       {
         name: 'Analytics',
-        link: '/status/coming-soon',
+        link: '/app/analytics',
         icon: TableChartTwoToneIcon
       }
     ]
