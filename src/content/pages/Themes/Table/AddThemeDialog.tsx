@@ -5,14 +5,23 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store/store";
 import * as React from "react";
 import {postTheme} from "../../../../store/slice/theme";
+import {useEffect, useState} from "react";
+import SuspenseLoader from "../../../../components/SuspenseLoader";
 
 
 function AddThemeDialog({open, onClose}) {
     const user = useSelector((state: RootState) => state.user.user);
-    const [value, setValue] = React.useState<ThemeOptionType | null>(null);
-
+    const [value, setValue] = useState<ThemeOptionType | null>(null);
+    const [loading, setLoading] = useState(false)
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        setLoading(false)
+        setValue(null)
+    }, [open])
+
     const addThemeForUser = () => {
+        setLoading(true)
         dispatch(postTheme(user.id, value, onClose))
     }
 
@@ -38,16 +47,21 @@ function AddThemeDialog({open, onClose}) {
                   width={"sm"}
                   actions={
                       <>
-                          <Button onClick={onClose} color={"secondary"}>
-                              Cancelar
-                          </Button>
-                          <Button onClick={addThemeForUser} disabled={!value}>
-                              Agregar
-                          </Button>
+
+                          {!loading && <>
+                              <Button onClick={onClose} color={"secondary"}>
+                                  Cancelar
+                              </Button>
+                              <Button onClick={addThemeForUser} disabled={!value}>
+                                  Agregar
+                              </Button>
+                          </>}
+
                       </>
                   }
         >
-            <ThemeAutocomplete onChange={onAutocompleteChange} value={value}/>
+            {loading && <SuspenseLoader/>}
+            {!loading &&  <ThemeAutocomplete onChange={onAutocompleteChange} value={value}/> }
         </MyDialog>
     )
 }
