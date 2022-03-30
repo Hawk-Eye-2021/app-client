@@ -58,44 +58,23 @@ function ThemeDetail() {
                 <title>Detalle tema</title>
             </Helmet>
             {loading && <SuspenseLoader/>}
-            {!loading &&
-                <Grid
-                    display={"flex"}
-                    direction="row"
-                    spacing={3}
-                    padding={3}
-                    className={"gridContainer"}
-                    container
-                >
-                    <Grid sm={12} md={8} item>
-                        <div className={"gridItem"}>
-                            <Contents themeId={themeId} themeName={theme.name} contents={contents}
-                                      sources={sources}/>
-                        </div>
-                    </Grid>
-                    <Grid sm={12} md={4} item>
-                        <div className={"gridItem"}>
-                            <div className={"graph-wrapper"}>
-                                <iframe
-                                    src={`https://hawk-eye-metabase.herokuapp.com/public/question/39949d2b-f27b-4013-a9c8-aeb5a33ddc25?theme_id=${themeId}`}
-                                    frameBorder="0"
-                                    height={"100%"}
-                                    width={"100%"}
-                                    allowTransparency
-                                />
-                            </div>
-                            <div className={"graph-wrapper"}>
-                                <iframe
-                                    src={`https://hawk-eye-metabase.herokuapp.com/public/question/39949d2b-f27b-4013-a9c8-aeb5a33ddc25?theme_id=${themeId}`}
-                                    frameBorder="0"
-                                    height={"100%"}
-                                    width={"100%"}
-                                    allowTransparency
-                                />
-                            </div>
-                        </div>
-                    </Grid>
+            {!loading && <Grid container spacing={3} padding={3}>
+
+                <Grid item>
+                    <Contents themeId={themeId} themeName={theme.name} contents={contents}
+                              sources={sources}/>
                 </Grid>
+
+
+                <Grid item width={'100%'} height={'600px'}>
+                    <iframe
+                        src={`http://hawk-eye-metabase.herokuapp.com/public/dashboard/c5ecfb05-d03d-4eb7-b1ae-5516450e89ad?theme_id=${themeId}#hide_parameters=theme_id&titled=false`}
+                        frameBorder={"0"}
+                        allowTransparency
+                        style={{width: '100%', height: '100%'}}
+                    />
+                </Grid>
+            </Grid>
             }
         </>
 
