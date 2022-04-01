@@ -21,8 +21,7 @@ function AddThemeDialog({open, onClose}) {
     }, [open])
 
     const addThemeForUser = () => {
-        setLoading(true)
-        dispatch(postTheme(user.id, value, onClose))
+        dispatch(postTheme(user.id, value, onClose, setLoading))
     }
 
     const onAutocompleteChange = (event, newValue) => {

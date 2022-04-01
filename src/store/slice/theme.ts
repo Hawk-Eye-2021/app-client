@@ -49,35 +49,38 @@ export const getThemesFromUser = (id: string) => (dispatch) => {
         })
 }
 
-export const postTheme = (userId, value, closeModal) => (dispatch) => {
-    if (value && value.id) {
-        http.post(`/users/${userId}/themes`, {themeId: value.id})
-            .then(() => {
-                dispatch(theme.actions.addUserTheme({...value}))
-                closeModal();
-                SnackbarUtils.success("Se agregó el tema exitosamente!")
-            })
-            .catch(() => {
-                SnackbarUtils.error("Ocurrió un error al agregar el tema!")
-            })
-    } else {
-        http.post(`/themes`, {name: value.name})
-            .then(res => {
-                http.post(`/users/${userId}/themes`, {themeId: res.data.id})
-                    .then(() => {
-                        dispatch(theme.actions.addUserTheme(res.data))
-                        closeModal();
-                        SnackbarUtils.success("Se agregó el tema exitosamente!")
-                    })
-                    .catch(() => {
-                        SnackbarUtils.error("Ocurrió un error al agregar el tema!")
-                    })
-            })
-            .catch(() => {
-                SnackbarUtils.error("Ocurrió un error al agregar el tema!")
-            })
-    }
-}
+export const postTheme = (userId, value, closeModal, setLoading) => (dispatch) => {
+  if (value && value.id) {
+    setLoading(true);
+    http.post(`/users/${userId}/themes`, { themeId: value.id })
+      .then(() => {
+        dispatch(theme.actions.addUserTheme({ ...value }));
+        closeModal();
+        setLoading(false);
+        SnackbarUtils.success('Se agregó el tema exitosamente!');
+      })
+      .catch(() => {
+        setLoading(false);
+        SnackbarUtils.error('Ocurrió un error al agregar el tema!');
+      });
+  } else {
+    http.post(`/themes`, { name: value.name })
+      .then(res => {
+        http.post(`/users/${userId}/themes`, { themeId: res.data.id })
+          .then(() => {
+            dispatch(theme.actions.addUserTheme(res.data));
+            closeModal();
+            SnackbarUtils.success('Se agregó el tema exitosamente!');
+          })
+          .catch(() => {
+            SnackbarUtils.error('Ocurrió un error al agregar el tema!');
+          });
+      })
+      .catch(() => {
+        SnackbarUtils.error('Ocurrió un error al agregar el tema!');
+      });
+  }
+};
 
 export const deleteTheme = (userId, themeToDelete) => (dispatch) => {
     http.delete(`/users/${userId}/themes/${themeToDelete.id}`)
