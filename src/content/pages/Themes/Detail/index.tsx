@@ -2,8 +2,6 @@ import Grid from "@mui/material/Grid";
 import "./ThemeDetail.scss"
 import Contents from "./Contents";
 import {Helmet} from "react-helmet-async";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../../store/store";
 import {useEffect, useState} from "react";
 import http from "../../../../http/http";
 import {ContentWithSentiment} from "../../../../dto/ContentDTO";
@@ -58,15 +56,13 @@ function ThemeDetail() {
                 <title>Detalle tema</title>
             </Helmet>
             {loading && <SuspenseLoader/>}
-            {!loading && <Grid container spacing={3} padding={3}>
-
-                <Grid item>
+            {!loading &&
+            <Grid container spacing={3} padding={3}>
+                <Grid item width={'100%'} className={'contentsContainer'}>
                     <Contents themeId={themeId} themeName={theme.name} contents={contents}
                               sources={sources}/>
                 </Grid>
-
-
-                <Grid item width={'100%'} height={'600px'}>
+                <Grid item className={'metabaseContainer'}>
                     <iframe
                         src={`http://hawk-eye-metabase.herokuapp.com/public/dashboard/c5ecfb05-d03d-4eb7-b1ae-5516450e89ad?theme_id=${themeId}#hide_parameters=theme_id&titled=false`}
                         frameBorder={"0"}

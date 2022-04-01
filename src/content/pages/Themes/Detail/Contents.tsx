@@ -16,6 +16,8 @@ import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import es from 'javascript-time-ago/locale/es.json'
 import PropTypes from "prop-types";
+import ContentsFilter from './ContentsFilter';
+import { useEffect, useState } from 'react';
 
 TimeAgo.addDefaultLocale(es)
 
@@ -25,9 +27,24 @@ function Contents({
                       sources
                   }: { themeName: string, contents: ContentWithSentiment[], sources: SourceDTO[] }) {
 
+    const [filterSources, setFilterSources] = useState(sources.map(s => s.id));
+    const [filterText, setFilterText] = useState('');
+    const [filteredContents, setFilteredContents] = useState([]);
+
+
+    useEffect(() => {
+        setFilteredContents(contents.filter((content) => {
+            // Is a content of the filtered sources
+            // or title includes filtered text (is text is empty it is ignored)
+            return filterSources.includes(content.sourceId) &&
+              (filterText ? content.title.toLowerCase().includes(filterText.toLowerCase()) : true)
+        }))
+    }, [filterSources, filterText])
+
     const getSourceIcon = (sourceId: string): JSX.Element => {
 
         return <Avatar
+          variant={'square'}
             src={sources.find(s => s.id === sourceId).icon}
         />
     }
@@ -69,12 +86,18 @@ function Contents({
     };
 
     return (
-        <Card>
-            <CardHeader title={`Contenidos del tema - ${themeName}`}/>
+        <Card className={'contentsCard'}>
+            <CardHeader title={`Contenidos del tema - ${themeName}`}
+                        action={<ContentsFilter sources={sources}
+                                                filterSources={filterSources}
+                                                setFilterSources={setFilterSources}
+                                                filterText={filterText}
+                                                setFilterText={setFilterText}/>}/>
             <Divider/>
-            <List disablePadding>
+            <List disablePadding >
                 {
-                    contents.sort(byDate).map(content => [
+                    filteredContents && filteredContents.length > 0 ?
+                    filteredContents.sort(byDate).map(content => [
                             <ListItem button={true} sx={{py: 2}} onClick={() => window.open(content.url, "blank_")}>
                                 <ListItemAvatar>
                                     {getSourceIcon(content.sourceId)}
@@ -102,7 +125,10 @@ function Contents({
                             </ListItem>,
                             <Divider/>
                         ]
-                    )
+                    ) :
+                      <div className={"errorMessageContainer"}>
+                          <span>No hay contenidos disponisbles</span>
+                      </div>
                 }
             </List>
         </Card>
