@@ -11,11 +11,14 @@ autocomplete:
     - sacar el free text ✅
 
 
+temas:
+    - mostrar temas para agregar que no sean del usuario (marian)
+
 contendidos:
 
     - link a URL ✅
     - fecha y hora✅
-    - filtros por source (marian)
+    - filtros por source (marian) ✅
     - boton hacia atras
     - paginado (mati)
     - orden por fecha (mati)
