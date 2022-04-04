@@ -13,6 +13,7 @@ interface TextProps {
   | 'info'
   | 'black';
   children?: ReactNode;
+  style?: object;
 }
 
 const TextWrapper = styled('span')(
@@ -55,10 +56,11 @@ const Text: FC<TextProps> = ({
   className = '',
   color = 'secondary',
   children,
+  style = {},
   ...rest
 }) => {
   return (
-    <TextWrapper className={'MuiText-' + color} {...rest}>
+    <TextWrapper className={'MuiText-' + color} {...rest} style={style}>
       {children}
     </TextWrapper>
   );
@@ -67,6 +69,7 @@ const Text: FC<TextProps> = ({
 Text.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  style: PropTypes.object,
   color: PropTypes.oneOf([
     'primary',
     'secondary',

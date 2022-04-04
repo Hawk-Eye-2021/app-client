@@ -19,6 +19,7 @@ import {
     useTheme,
     CardHeader
 } from '@mui/material';
+import Text from "../Text";
 
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
@@ -27,6 +28,7 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 interface IColumn {
     title: string;
     key: string;
+    width?: number
 }
 
 interface TableProps {
@@ -92,6 +94,15 @@ const MyTable: FC<TableProps> = ({ rows, columns, title, addAction, deleteAction
 
     const theme = useTheme();
 
+    const getCellColor = (key) => {
+        const map = {
+            negatives: 'error',
+            positives: 'success',
+            neutrals: 'warning'
+        };
+
+        return map[key] || "textPrimary";
+    }
     return (
         <Card>
             <CardHeader
@@ -134,7 +145,7 @@ const MyTable: FC<TableProps> = ({ rows, columns, title, addAction, deleteAction
                             {
                                 columns.map((col) => {
                                     return (
-                                        <TableCell key={`col-${col.title}`}>
+                                        <TableCell key={`col-${col.title}`} style={col.width ? {width: `${col.width}px`} : {}}>
                                             {col.title}
                                         </TableCell>
                                     )
@@ -154,15 +165,12 @@ const MyTable: FC<TableProps> = ({ rows, columns, title, addAction, deleteAction
                                         columns.map((col, cellIndex) => {
                                             return (
                                                 <TableCell key={`cell-${index}-${cellIndex}`}>
-                                                    <Typography
-                                                        variant="body1"
-                                                        fontWeight="bold"
-                                                        color="text.primary"
-                                                        gutterBottom
-                                                        noWrap
+                                                    <Text
+                                                        color={getCellColor(col.key)}
+                                                        style={{fontWeight: "bold"}}
                                                     >
-                                                        {paginatedData[index][col.key] || ""}
-                                                    </Typography>
+                                                        {paginatedData[index][col.key] || `${Math.floor(Math.random() * 100)}`}
+                                                    </Text>
                                                 </TableCell>
                                             )
                                         })

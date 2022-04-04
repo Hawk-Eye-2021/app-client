@@ -51,7 +51,13 @@ function ThemesTable() {
                 >
                     <Grid item xs={12}>
                         <MyTable title={"Temas"}
-                                 columns={[{title: "ID", key: "id"}, {title: "Nombre", key: "name"}]}
+                                 columns={[
+                                    {title: "ID", key: "id"},
+                                    {title: "Nombre", key: "name"},
+                                    {title: "# Positivos", key: "positives"},
+                                    {title: "# Neutrales", key: "neutrals"},
+                                    {title: "# Negativos", key: "negatives"},
+                                 ]}
                                  rows={themeState.userThemes}
                                  addAction={() => setOpenAddThemeModal(true)}
                                  deleteAction={handleDeleteTheme}
