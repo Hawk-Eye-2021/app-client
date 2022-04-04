@@ -60,7 +60,9 @@ function AddThemeDialog({open, onClose}) {
                   }
         >
             {loading && <SuspenseLoader/>}
-            {!loading &&  <ThemeAutocomplete onChange={onAutocompleteChange} value={value}/> }
+            {!loading &&  <ThemeAutocomplete onChange={onAutocompleteChange}
+                                             user={user}
+                                             value={value}/> }
         </MyDialog>
     )
 }

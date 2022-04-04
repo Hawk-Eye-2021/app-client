@@ -48,7 +48,7 @@ const applyFilters = (
     if(filterValue) {
         return rows.filter((row) => {
             // @ts-ignore
-            return Object.values(row).some((cellValue) => cellValue.includes ? cellValue.includes(filterValue) : false);
+            return Object.values(row).some((cellValue) => cellValue.includes ? cellValue.toLowerCase().includes(filterValue.toLowerCase()) : false);
         });
     }
     return rows;

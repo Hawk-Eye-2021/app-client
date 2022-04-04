@@ -12,17 +12,18 @@ export interface ThemeOptionType {
 
 const filter = createFilterOptions<ThemeOptionType>();
 
-export default function ThemeAutocomplete({onChange, value}) {
+export default function ThemeAutocomplete({onChange, value, user}) {
     const [themes, setThemes] = useState<ThemeOptionType[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         setLoading(true)
-        http.get(`/themes`)
+        http.get(`/users/${user.id}/themesToSubscribe`)
             .then(res => {
                 setThemes(res.data)
                 setLoading(false)
             })
+      //eslint-disable-next-line
     }, [])
 
     return (
