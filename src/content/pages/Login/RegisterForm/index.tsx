@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {CardActions, CardContent, FormControl, TextField} from "@mui/material";
+import { CardActions, CardContent, CircularProgress, FormControl, TextField } from '@mui/material';
 import "../Login.scss";
 import Button from "@mui/material/Button";
 
-function RegisterForm({username, password, email, setEmail, setUsername, setPassword, setShowLogin}) {
+function RegisterForm({username, password, email, setEmail, setUsername, setPassword, setShowLogin, loading}) {
 
     const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -71,9 +71,12 @@ function RegisterForm({username, password, email, setEmail, setUsername, setPass
                 </FormControl>
             </CardContent>
             <CardActions className={"footer"}>
-                <Button type={"submit"} disabled={buttonDisabled}>
-                    Registrarme
-                </Button>
+                {
+                    loading ? <CircularProgress /> :
+                      <Button type={"submit"} disabled={buttonDisabled}>
+                          Registrarme
+                      </Button>
+                }
                 <small className={"footer-text"} onClick={() => setShowLogin(true)}>
                     Ya tengo una cuenta
                 </small>
@@ -91,6 +94,7 @@ RegisterForm.propTypes = {
     setEmail: PropTypes.func.isRequired,
     setPassword: PropTypes.func.isRequired,
     setShowLogin: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
 }
 
 export default RegisterForm

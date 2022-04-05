@@ -15,23 +15,29 @@ function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const handleFormSubmit = (e) => {
         e.preventDefault()
+        setLoading(true);
         if(showLogin) {
-            dispatch(login(username, password, () => navigate("/app/themes")))
+            dispatch(login(username, password, () => {
+                navigate("/app/themes");
+            }, setLoading))
         } else {
             http.post("/users", {name: username, password, email})
                 .then(() => {
+                    setLoading(false);
                     setShowLogin(true);
                     SnackbarUtils.success("El usuario se ha creado exitosamente")
                 })
                 .catch((err) => {
+                    setLoading(false);
                     const errResponse = err.response;
-                    if(errResponse.status === 400) {
+                    if(errResponse && errResponse.status === 400) {
                         SnackbarUtils.error(errResponse.data.message)
                     } else {
                         SnackbarUtils.error("Ocurrió un error al crear el usuario")
@@ -59,7 +65,8 @@ function Login() {
                                                setPassword={setPassword}
                                                setUsername={setUsername}
                                                setShowLogin={setShowLogin}
-                                               username={username}/> :
+                                               username={username}
+                                               loading={loading}/> :
                                     <RegisterForm password={password}
                                                   setPassword={setPassword}
                                                   setUsername={setUsername}
@@ -67,6 +74,8 @@ function Login() {
                                                   username={username}
                                                   email={email}
                                                   setEmail={setEmail}
+                                                  loading={loading}
+
                                     />
                             }
                         </form>

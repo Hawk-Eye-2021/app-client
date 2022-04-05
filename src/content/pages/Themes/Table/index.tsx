@@ -54,11 +54,12 @@ function ThemesTable() {
                                  columns={[
                                     {title: "ID", key: "id"},
                                     {title: "Nombre", key: "name"},
-                                    {title: "# Positivos", key: "positives"},
-                                    {title: "# Neutrales", key: "neutrals"},
-                                    {title: "# Negativos", key: "negatives"},
+                                    {title: "# Positivos", key: "positive", color: 'success'},
+                                    {title: "# Neutrales", key: "neutral", color: 'warning'},
+                                    {title: "# Negativos", key: "negative", color: 'error'},
                                  ]}
                                  rows={themeState.userThemes}
+                                 filterRows={["name"]}
                                  addAction={() => setOpenAddThemeModal(true)}
                                  deleteAction={handleDeleteTheme}
                                  viewAction={handleViewTheme}

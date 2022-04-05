@@ -26,22 +26,24 @@ export const user = createSlice(
     }
 )
 
-export const login = (username: string, password: string, callback: any) => (dispatch) => {
-    http.post(`/users/login`, {username, password})
-        .then(res => {
-            dispatch(user.actions.setUser(res.data))
-            callback()
-            SnackbarUtils.info(`Bienvenido a HawkEye ${res.data.name}`)
-        })
-        .catch((err) => {
-            const errResponse = err.response;
-            if(errResponse.status === 400) {
-                SnackbarUtils.error(errResponse.data.message)
-            } else {
-                SnackbarUtils.error("Ocurrió un error al hacer login!")
-            }
-        })
-}
+export const login = (username: string, password: string, callback: any, setLoading: any) => (dispatch) => {
+  http.post(`/users/login`, { username, password })
+    .then(res => {
+      dispatch(user.actions.setUser(res.data));
+      setLoading(false);
+      callback();
+      SnackbarUtils.info(`Bienvenido a HawkEye ${res.data.name}`);
+    })
+    .catch((err) => {
+      setLoading(false);
+      const errResponse = err.response;
+      if (errResponse && errResponse.status === 400) {
+        SnackbarUtils.error(errResponse.data.message);
+      } else {
+        SnackbarUtils.error('Ocurrió un error al hacer login!');
+      }
+    });
+};
 
 export const logout = () => (dispatch) => {
     dispatch(user.actions.setUser(null))

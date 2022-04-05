@@ -15,7 +15,6 @@ import {
     TablePagination,
     TableRow,
     TableContainer,
-    Typography,
     useTheme,
     CardHeader
 } from '@mui/material';
@@ -28,7 +27,14 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 interface IColumn {
     title: string;
     key: string;
-    width?: number
+    color?:
+    | 'primary'
+    | 'secondary'
+    | 'error'
+    | 'warning'
+    | 'success'
+    | 'info'
+    | 'black';
 }
 
 interface TableProps {
@@ -39,18 +45,21 @@ interface TableProps {
     addAction: () => any;
     deleteAction: (itemToDelete: any) => any;
     viewAction: (itemToView: any) => any;
+    filterRows: any[]
 }
 
 
 const applyFilters = (
     rows: any[],
     columns: IColumn[],
-    filterValue: string
+    filterValue: string,
+    filterRows: any[]
 ): any[] => {
     if(filterValue) {
         return rows.filter((row) => {
+            const filterEntries = Object.keys(row).filter((key) => filterRows.includes(key)).map(key => row[key])
             // @ts-ignore
-            return Object.values(row).some((cellValue) => cellValue.includes ? cellValue.toLowerCase().includes(filterValue.toLowerCase()) : false);
+            return filterEntries.some((cellValue) => cellValue.includes ? cellValue.toLowerCase().includes(filterValue.toLowerCase()) : false);
         });
     }
     return rows;
@@ -64,7 +73,7 @@ const applyPagination = (
     return rows.slice(page * limit, page * limit + limit);
 };
 
-const MyTable: FC<TableProps> = ({ rows, columns, title, addAction, deleteAction, viewAction }) => {
+const MyTable: FC<TableProps> = ({ rows, columns, title, addAction, deleteAction, viewAction, filterRows }) => {
 
     const [page, setPage] = useState<number>(0);
     const [limit, setLimit] = useState<number>(5);
@@ -81,7 +90,7 @@ const MyTable: FC<TableProps> = ({ rows, columns, title, addAction, deleteAction
     };
 
     useEffect(() => {
-        setFilteredData(applyFilters(rows, columns, filterValue))
+        setFilteredData(applyFilters(rows, columns, filterValue, filterRows))
     }, [rows, columns, filterValue]);
 
     useEffect(() => {
@@ -94,15 +103,6 @@ const MyTable: FC<TableProps> = ({ rows, columns, title, addAction, deleteAction
 
     const theme = useTheme();
 
-    const getCellColor = (key) => {
-        const map = {
-            negatives: 'error',
-            positives: 'success',
-            neutrals: 'warning'
-        };
-
-        return map[key] || "textPrimary";
-    }
     return (
         <Card>
             <CardHeader
@@ -145,7 +145,7 @@ const MyTable: FC<TableProps> = ({ rows, columns, title, addAction, deleteAction
                             {
                                 columns.map((col) => {
                                     return (
-                                        <TableCell key={`col-${col.title}`} style={col.width ? {width: `${col.width}px`} : {}}>
+                                        <TableCell key={`col-${col.title}`} variant={"head"} align={"center"}>
                                             {col.title}
                                         </TableCell>
                                     )
@@ -164,12 +164,14 @@ const MyTable: FC<TableProps> = ({ rows, columns, title, addAction, deleteAction
                                     {
                                         columns.map((col, cellIndex) => {
                                             return (
-                                                <TableCell key={`cell-${index}-${cellIndex}`}>
+                                                <TableCell key={`cell-${index}-${cellIndex}`}
+                                                           variant={"body"}
+                                                           align={"center"}>
                                                     <Text
-                                                        color={getCellColor(col.key)}
+                                                        color={col.color || "black"}
                                                         style={{fontWeight: "bold"}}
                                                     >
-                                                        {paginatedData[index][col.key] || `${Math.floor(Math.random() * 100)}`}
+                                                        {paginatedData[index][col.key] || ""}
                                                     </Text>
                                                 </TableCell>
                                             )
@@ -232,6 +234,7 @@ const MyTable: FC<TableProps> = ({ rows, columns, title, addAction, deleteAction
 
 MyTable.propTypes = {
     rows: PropTypes.array.isRequired,
+    filterRows: PropTypes.array.isRequired,
     columns: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,
     addAction: PropTypes.func.isRequired,
